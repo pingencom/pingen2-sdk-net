@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Pingen.Abstractions/Pingen.Abstractions.csproj" />
+    <Project Path="src/Pingen.AspNetCore/Pingen.AspNetCore.csproj" />
+    <Project Path="src/Pingen/Pingen.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Pingen.Tests/Pingen.Tests.csproj" />
+    <Project Path="tests/Pingen.Tests.Integration/Pingen.Tests.Integration.csproj" />
+  </Folder>
+</Solution>
