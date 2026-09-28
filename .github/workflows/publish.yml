@@ -1,0 +1,64 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_CONFIG: Release
+      SOLUTION: Pingen.slnx
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
+
+    steps:
+      - uses: actions/checkout@v5.0.0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      # Version comes from the git tag ("1.2.3" or "v1.2.3" -> 1.2.3). Refuse anything that is not a semantic
+      # version so a stray tag (e.g. "latest") can never publish a garbage package.
+      - name: Derive and validate version from tag
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/}"
+          VERSION="${VERSION#v}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Tag '$VERSION' is not a semantic version (X.Y.Z or X.Y.Z-prerelease); refusing to publish."
+            exit 1
+          fi
+          echo "BUILD_VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Restore
+        run: dotnet restore $SOLUTION
+
+      # Gate: never publish a package that fails the offline suite (the tag may point at an untested commit).
+      - name: Test (offline suite)
+        run: dotnet test tests/Pingen.Tests/Pingen.Tests.csproj -c $BUILD_CONFIG --no-restore
+
+      # Only Pingen / Pingen.Abstractions / Pingen.AspNetCore are packable (test projects set IsPackable=false).
+      # Pack into a single flat folder so the push glob is unambiguous.
+      - name: Pack
+        run: >
+          dotnet pack $SOLUTION
+          -c $BUILD_CONFIG
+          --no-restore
+          -p:Version=$BUILD_VERSION
+          -p:PackageVersion=$BUILD_VERSION
+          --output ./artifacts
+
+      - name: Publish to NuGet
+        run: >
+          dotnet nuget push "artifacts/*.nupkg"
+          --source https://api.nuget.org/v3/index.json
+          --api-key "${{ secrets.NUGET_API_KEY }}"
+          --skip-duplicate

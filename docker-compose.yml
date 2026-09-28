@@ -1,0 +1,39 @@
+# Development environment for the Pingen .NET SDK.
+#
+# Usage:
+#   docker compose build
+#   docker compose up -d
+#   docker compose exec dotnet-sdk dotnet restore Pingen.slnx
+#   docker compose exec dotnet-sdk dotnet test tests/Pingen.Tests
+#   docker compose exec dotnet-sdk dotnet test tests/Pingen.Tests
+#   docker compose exec dotnet-sdk dotnet tool restore
+#   docker compose exec dotnet-sdk dotnet csharpier check .            # format gate
+#   docker compose exec dotnet-sdk dotnet format analyzers --verify-no-changes   # lint gate
+#
+# One-shot (no long-running container):
+#   docker compose run --rm dotnet-sdk dotnet test Pingen.slnx
+services:
+  dotnet-sdk:
+    image: pingen/dotnet-sdk
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DOTNET_VERSION: ${DOTNET_VERSION:-10.0}
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    container_name: pingen-dotnet-sdk
+    working_dir: /usr/src
+    # Staging credentials for the integration tests are passed through from the host shell when set.
+    # Not needed for the offline suites (unit + endpoint). The integration suite also reads a repo-root .env.
+    environment:
+      - PINGEN2_CLIENT_ID
+      - PINGEN2_CLIENT_SECRET
+      - PINGEN2_ORGANIZATION_ID
+      - PINGEN2_ORGANIZATION_NAME
+    volumes:
+      - ./:/usr/src
+      - nuget-cache:/home/sdk/.nuget/packages
+
+volumes:
+  nuget-cache:

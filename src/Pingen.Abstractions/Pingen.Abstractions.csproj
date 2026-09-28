@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Pingen.Abstractions</RootNamespace>
+    <Title>Pingen Abstractions</Title>
+    <Description>Models, views and enums for the Pingen API .NET SDK.</Description>
+    <PackageTags>pingen;models;dto;views;enums;api;sdk</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- The internal JSON converters are exercised by the unit tests. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="Pingen.Tests" />
+  </ItemGroup>
+</Project>
