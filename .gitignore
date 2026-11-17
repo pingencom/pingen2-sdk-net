@@ -1,0 +1,34 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+*.binlog
+
+# NuGet packages produced by `dotnet pack`
+*.nupkg
+
+# Test & coverage output
+[Tt]est[Rr]esults/
+coverage/
+*.trx
+*.cobertura.xml
+
+# Solution & user files (this repo uses the modern .slnx format; ignore any legacy .sln an IDE generates)
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDEs / editors
+.vs/
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local integration credentials (never commit real secrets; copy .env.example instead)
+.env

@@ -1,0 +1,49 @@
+<Project>
+  <!--
+    Shared build settings for every project in the solution.
+    Package identity (Title/Description/PackageId) stays per-project in each .csproj;
+    ownership metadata below is centralised so it stays consistent across packages.
+  -->
+  <PropertyGroup>
+    <Company>Pingen GmbH</Company>
+    <Authors>Pingen GmbH</Authors>
+    <Product>Pingen .NET SDK</Product>
+    <Copyright>Copyright (c) Pingen GmbH</Copyright>
+    <PackageProjectUrl>https://github.com/pingencom/pingen2-sdk-net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pingencom/pingen2-sdk-net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <!-- Shown on the nuget.org package page; the README is packed below. -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- Ship the SDK README on the nuget.org listing of every package (test projects are IsPackable=false). -->
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+
+  <!-- Static analysis ("lint"). Analyzers ship with the SDK; enable them explicitly. -->
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <!--
+      Public members still require a <summary> (CS1591 stays on), but individual parameters may be documented
+      selectively rather than exhaustively: CS1573 ("parameter has no matching param tag when others do") is
+      suppressed so we can document only the parameters worth explaining instead of padding every one.
+    -->
+    <NoWarn>$(NoWarn);CS1573</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    Package quality: deterministic builds + Source Link (bundled in the .NET SDK, no extra package) so consumers
+    can step into the SDK sources. PDBs are embedded in the assemblies, so a release is a single *.nupkg push -
+    no separate symbol package or symbol server. ContinuousIntegrationBuild is set only on CI for reproducibility.
+  -->
+  <PropertyGroup>
+    <DebugType>embedded</DebugType>
+    <Deterministic>true</Deterministic>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+</Project>

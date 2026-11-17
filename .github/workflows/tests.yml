@@ -1,0 +1,67 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      SOLUTION: Pingen.slnx
+      BUILD_CONFIG: Release
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
+
+    steps:
+      - uses: actions/checkout@v5.0.0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore local tools (CSharpier)
+        run: dotnet tool restore
+
+      - name: Restore dependencies
+        run: dotnet restore $SOLUTION
+
+      # Formatting gate - opinionated formatter, verified in CI.
+      - name: Format check (CSharpier)
+        run: dotnet csharpier check .
+
+      # Lint gate - Roslyn analyzer diagnostics.
+      - name: Lint (analyzers)
+        run: dotnet format analyzers $SOLUTION --verify-no-changes --no-restore --severity warn
+
+      - name: Build
+        run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
+
+      # Offline suite only. The live staging suite (tests/Pingen.Tests.Integration) is run on demand.
+      # NOTE: no --no-build here - on the .NET 10 SDK "dotnet test --no-build" can silently skip execution
+      # (exit 0, zero tests run). --no-restore keeps the restore optimisation without that trap.
+      - name: Test
+        run: >
+          dotnet test
+          tests/Pingen.Tests/Pingen.Tests.csproj
+          --configuration $BUILD_CONFIG
+          --no-restore
+          --collect:"XPlat Code Coverage"
+          --results-directory ./coverage
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: ./coverage
+          retention-days: 7
