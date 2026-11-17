@@ -12,15 +12,13 @@ public abstract class IntegrationSupport
 
     protected const string FileNameCancellable = "test_simulate_cancellable.pdf";
 
-    private static readonly string[] CredentialKeys = ["PINGEN2_CLIENT_ID", "PINGEN2_CLIENT_SECRET", "PINGEN2_ORGANIZATION_ID", "PINGEN2_ORGANIZATION_NAME"];
+    private static readonly string[] CredentialKeys = ["PINGEN2_CLIENT_ID", "PINGEN2_CLIENT_SECRET", "PINGEN2_ORGANISATION_ID"];
 
     private static IReadOnlyDictionary<string, string>? _credentials;
 
     protected IPingenApiClient Client { get; private set; } = null!;
 
     protected string OrganisationId { get; private set; } = null!;
-
-    protected string? ExpectedOrganisationName { get; private set; }
 
     [OneTimeSetUp]
     public async Task IntegrationSetUp()
@@ -30,10 +28,9 @@ public abstract class IntegrationSupport
         if (string.IsNullOrEmpty(credentials["PINGEN2_CLIENT_ID"]) || string.IsNullOrEmpty(credentials["PINGEN2_CLIENT_SECRET"]))
             Assert.Ignore("Integration credentials not configured. Copy .env.example to .env and fill in PINGEN2_CLIENT_ID / PINGEN2_CLIENT_SECRET.");
 
-        // Integration tests ALWAYS run against staging - never production. This is not configurable on purpose.
-        ExpectedOrganisationName = string.IsNullOrEmpty(credentials["PINGEN2_ORGANIZATION_NAME"]) ? null : credentials["PINGEN2_ORGANIZATION_NAME"];
+        var organisationId = credentials["PINGEN2_ORGANISATION_ID"];
 
-        var organisationId = credentials["PINGEN2_ORGANIZATION_ID"];
+        // Integration tests ALWAYS run against staging - never production. This is not configurable on purpose.
         Client = CreateClient(
             PingenConfiguration.Create(credentials["PINGEN2_CLIENT_ID"], credentials["PINGEN2_CLIENT_SECRET"], organisationId, useStaging: true)
         );
@@ -104,7 +101,11 @@ public abstract class IntegrationSupport
         Dictionary<string, string> dotenv = ParseDotenv(FindDotenv());
         var credentials = new Dictionary<string, string>();
         foreach (var key in CredentialKeys)
-            credentials[key] = Environment.GetEnvironmentVariable(key) ?? (dotenv.TryGetValue(key, out var value) ? value : string.Empty);
+        {
+            // A non-empty environment variable wins over .env (same rule as the other Pingen SDKs).
+            var fromEnvironment = Environment.GetEnvironmentVariable(key);
+            credentials[key] = !string.IsNullOrEmpty(fromEnvironment) ? fromEnvironment : (dotenv.TryGetValue(key, out var value) ? value : string.Empty);
+        }
 
         _credentials = credentials;
         return credentials;

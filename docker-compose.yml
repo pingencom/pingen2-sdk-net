@@ -29,8 +29,7 @@ services:
     environment:
       - PINGEN2_CLIENT_ID
       - PINGEN2_CLIENT_SECRET
-      - PINGEN2_ORGANIZATION_ID
-      - PINGEN2_ORGANIZATION_NAME
+      - PINGEN2_ORGANISATION_ID
     volumes:
       - ./:/usr/src
       - nuget-cache:/home/sdk/.nuget/packages
