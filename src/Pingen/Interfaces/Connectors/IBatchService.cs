@@ -90,7 +90,7 @@ public interface IBatchService : IConnectorService
     /// Delete a batch. <see href="https://api.pingen.com/documentation#tag/batches.general/operation/batches.delete">API Doc - Batches delete</see>
     /// </summary>
     /// <param name="batchId">ID of the batch to delete</param>
-    /// <param name="withDeliverables">Optional, also delete the deliverables (letters) contained in the batch. Default false.</param>
+    /// <param name="withDeliverables">Optional, also delete the deliverables (letters / e-bills / emails) contained in the batch. Default false.</param>
     /// <param name="cancellationToken">Optional, A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
     public Task<ApiResult> Delete(string batchId, [Optional] bool withDeliverables, [Optional] CancellationToken cancellationToken);
 

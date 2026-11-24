@@ -114,7 +114,7 @@ public sealed class BatchService : ConnectorService, IBatchService
         {
             Id = batchId,
             Type = "batches",
-            Attributes = new BatchDelete { WithLetters = withDeliverables, WithDeliverables = withDeliverables },
+            Attributes = new BatchDelete { WithDeliverables = withDeliverables },
         };
 
         return await ConnectionHandler.DeleteAsync(BatchesEndpoints.Single(batchId), data, cancellationToken);

@@ -10,12 +10,6 @@ namespace Pingen.Abstractions.Models.Batches.Views;
 public sealed record BatchDelete : IAttributes
 {
     /// <summary>
-    /// Delete the letters contained in the batch as well.
-    /// </summary>
-    [JsonPropertyName("with_letters")]
-    public required bool WithLetters { get; init; }
-
-    /// <summary>
     /// Delete all deliverables contained in the batch as well (any channel).
     /// </summary>
     [JsonPropertyName("with_deliverables")]

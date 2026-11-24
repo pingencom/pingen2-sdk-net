@@ -310,7 +310,6 @@ internal static class PingenResponseFactory
             billing_mode = _faker.PickRandom("prepaid", "postpaid"),
             billing_currency = "CHF",
             billing_balance = Math.Round(_faker.Random.Double(0, 1000), 2),
-            default_country = _faker.PickRandom("CH", "DE", "AT"),
             default_address_position = _faker.PickRandom("left", "right"),
             data_retention_addresses = _faker.Random.Int(30, 365),
             data_retention_pdf = _faker.Random.Int(30, 365),

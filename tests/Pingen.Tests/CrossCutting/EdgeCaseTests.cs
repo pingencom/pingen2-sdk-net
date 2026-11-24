@@ -129,7 +129,6 @@ public sealed class EdgeCaseTests : EndpointTestBase
                             billing_mode = "prepaid",
                             billing_currency = "CHF",
                             billing_balance = 100.0,
-                            default_country = "CH",
                         },
                     },
                 },

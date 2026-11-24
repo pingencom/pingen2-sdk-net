@@ -52,7 +52,6 @@
         "billing_mode": "prepaid",
         "billing_currency": "CHF",
         "billing_balance": 1234.5,
-        "default_country": "CH",
         "default_address_position": "left",
         "data_retention_addresses": 18,
         "data_retention_pdf": 12,
@@ -62,9 +61,6 @@
           "beta_channels"
         ],
         "missing_credits": 0,
-        "limits_monthly_letters_count": 5000,
-        "limits_monthly_emails_count": 5000,
-        "limits_monthly_ebills_count": 5000,
         "created_at": "2022-11-20T20:33:23+0100",
         "updated_at": "2026-07-29T11:21:09+0200"
       },
