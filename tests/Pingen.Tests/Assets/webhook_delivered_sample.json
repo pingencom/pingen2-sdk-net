@@ -44,7 +44,6 @@
         "billing_mode": "prepaid",
         "billing_currency": "CHF",
         "billing_balance": 199996.35,
-        "default_country": "CH",
         "default_address_position": "left",
         "data_retention_addresses": 6,
         "data_retention_pdf": 1,

@@ -26,9 +26,6 @@ public static class OrganisationFields
     /// <summary>Current billing balance</summary>
     public const string BillingBalance = "billing_balance";
 
-    /// <summary>Default country code for letters</summary>
-    public const string DefaultCountry = "default_country";
-
     /// <summary>Default address window position</summary>
     public const string DefaultAddressPosition = "default_address_position";
 
@@ -51,15 +48,6 @@ public static class OrganisationFields
     /// Credits the organisation is short of. Non-zero means prepaid sending will stall until it is topped up.
     /// </summary>
     public const string MissingCredits = "missing_credits";
-
-    /// <summary>Monthly letter quota</summary>
-    public const string LimitsMonthlyLettersCount = "limits_monthly_letters_count";
-
-    /// <summary>Monthly email quota</summary>
-    public const string LimitsMonthlyEmailsCount = "limits_monthly_emails_count";
-
-    /// <summary>Monthly ebill quota</summary>
-    public const string LimitsMonthlyEbillsCount = "limits_monthly_ebills_count";
 
     /// <summary>Timestamp when the organisation was created</summary>
     public const string CreatedAt = "created_at";

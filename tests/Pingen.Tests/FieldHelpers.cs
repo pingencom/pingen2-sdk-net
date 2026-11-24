@@ -73,7 +73,6 @@ public class FieldHelpers
             () => OrganisationFields.BillingMode.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.BillingMode)),
             () => OrganisationFields.BillingCurrency.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.BillingCurrency)),
             () => OrganisationFields.BillingBalance.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.BillingBalance)),
-            () => OrganisationFields.DefaultCountry.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.DefaultCountry)),
             () =>
                 OrganisationFields.DefaultAddressPosition.ShouldBe(
                     PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.DefaultAddressPosition)
@@ -88,19 +87,7 @@ public class FieldHelpers
             () => OrganisationFields.UpdatedAt.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.UpdatedAt)),
             () => OrganisationFields.Edition.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.Edition)),
             () => OrganisationFields.Flags.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.Flags)),
-            () => OrganisationFields.MissingCredits.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.MissingCredits)),
-            () =>
-                OrganisationFields.LimitsMonthlyLettersCount.ShouldBe(
-                    PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.LimitsMonthlyLettersCount)
-                ),
-            () =>
-                OrganisationFields.LimitsMonthlyEmailsCount.ShouldBe(
-                    PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.LimitsMonthlyEmailsCount)
-                ),
-            () =>
-                OrganisationFields.LimitsMonthlyEbillsCount.ShouldBe(
-                    PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.LimitsMonthlyEbillsCount)
-                )
+            () => OrganisationFields.MissingCredits.ShouldBe(PingenAttributesPropertyHelper<Organisation>.GetJsonPropertyName(x => x.MissingCredits))
         );
     }
 
